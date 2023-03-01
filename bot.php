@@ -43,5 +43,42 @@ class TelegramBot {
             curl_close($curl);
         }
     }
+
+    public function sendChatGPT() {
+        if ($this->mensaje == '/gpt'){
+            $env = file_get_contents('.env');
+            $lines = explode(PHP_EOL, $env);
+            foreach ($lines as $line) {
+                putenv($line);
+            }
+
+            $headers = [
+                'Content-Type: application/json',
+                'Authorization: Bearer ' . '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',
+            ];
+            $data = [
+                'model' => 'text-davinci-003',
+                'prompt' => getenv('GPT').substr($this->mensaje, 4),
+                'temperature' => 0.5,
+                'max_tokens' => 200,
+                'stop' => ['\n'],
+            ];
+            $curl = curl_init();
+            curl_setopt($curl, CURLOPT_URL, 'https://api.openai.com/v1/completions');
+            curl_setopt($curl, CURLOPT_POST, true);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
+            curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+            $response = curl_exec($curl);
+            curl_close($curl);
+            $message = json_decode($response, true)['choices'][0]['text'];
+
+            $url =  $this->website.'/sendMessage?chat_id='.
+                    $this->chatId.'&parse_mode=HTML&text='.
+                    urlencode($message);
+            file_get_contents($url);
+        }
+
+    }
 }
 ?>
