@@ -1,0 +1,3 @@
+/start#Bienvenido al bot.
+/info#Información sobre el bot.
+/ayuda#Puedes usar los siguientes comandos: /start, /info, /ayuda.
