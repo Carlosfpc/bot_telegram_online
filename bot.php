@@ -54,7 +54,7 @@ class TelegramBot {
 
             $headers = [
                 'Content-Type: application/json',
-                'Authorization: Bearer ' . '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',
+                'Authorization: Bearer ' . 'TOKEN_GPT',
             ];
             $data = [
                 'model' => 'text-davinci-003',
